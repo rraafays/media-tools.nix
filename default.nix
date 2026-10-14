@@ -10,25 +10,25 @@ let
   subliminal = pkgs.callPackage ./package/subliminal.nix { };
 
   ffprobeHelper = pkgs.writeShellScript "ffprobe-to-info" (
-    pkgs.replaceVars (builtins.readFile ./scripts/ffprobe-to-info.sh) {
+    pkgs.replaceVars ./scripts/ffprobe-to-info.sh {
       ffprobeBin = "${pkgs.ffmpeg}/bin/ffprobe";
     }
   );
 
   subliminalDownload = pkgs.writeShellScriptBin "subliminal-download" (
-    pkgs.replaceVars (builtins.readFile ./scripts/subliminal-download.sh) {
+    pkgs.replaceVars ./scripts/subliminal-download.sh {
       subliminal = "${subliminal}/bin/subliminal";
     }
   );
 
   videoInfo = pkgs.writeShellScriptBin "video-info" (
-    pkgs.replaceVars (builtins.readFile ./scripts/video-info.sh) {
+    pkgs.replaceVars ./scripts/video-info.sh {
       ffprobe = "${ffprobeHelper}";
     }
   );
 
   audioInfo = pkgs.writeShellScriptBin "audio-info" (
-    pkgs.replaceVars (builtins.readFile ./scripts/audio-info.sh) {
+    pkgs.replaceVars ./scripts/audio-info.sh {
       ffprobe = "${ffprobeHelper}";
     }
   );
