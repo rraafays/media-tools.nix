@@ -9,26 +9,29 @@ let
   cfg = config.services.mediaTools;
   subliminal = pkgs.callPackage ./package/subliminal.nix { };
 
+  readSubst = script: vars:
+    builtins.readFile "${pkgs.replaceVars script vars}";
+
   ffprobeHelper = pkgs.writeShellScript "ffprobe-to-info" (
-    pkgs.replaceVars ./scripts/ffprobe-to-info.sh {
+    readSubst ./scripts/ffprobe-to-info.sh {
       ffprobeBin = "${pkgs.ffmpeg}/bin/ffprobe";
     }
   );
 
   subliminalDownload = pkgs.writeShellScriptBin "subliminal-download" (
-    pkgs.replaceVars ./scripts/subliminal-download.sh {
+    readSubst ./scripts/subliminal-download.sh {
       subliminal = "${subliminal}/bin/subliminal";
     }
   );
 
   videoInfo = pkgs.writeShellScriptBin "video-info" (
-    pkgs.replaceVars ./scripts/video-info.sh {
+    readSubst ./scripts/video-info.sh {
       ffprobe = "${ffprobeHelper}";
     }
   );
 
   audioInfo = pkgs.writeShellScriptBin "audio-info" (
-    pkgs.replaceVars ./scripts/audio-info.sh {
+    readSubst ./scripts/audio-info.sh {
       ffprobe = "${ffprobeHelper}";
     }
   );
